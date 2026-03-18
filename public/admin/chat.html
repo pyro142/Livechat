@@ -3,30 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Agent Console</title>
     <link rel="stylesheet" href="style.css">
     <script src="app.js"></script>
 </head>
 <body>
-    <!-- Sidebar with chat list -->
-    <ul class="chat-list">
-    </ul>
+    <div class="shell">
+        <!-- Sidebar with chat list -->
+        <aside class="sidebar">
+            <div class="brand">
+            <strong>Agent Console</strong>
+            <span id="connStatus" class="small">Connecting…</span>
+            </div>
 
-    <!-- Main Chat Pane -->
-    <div class="chat-container">
-            <label class="chat-list-item" for="base-color-input">
-                <input
-                type="color"
-                id = "base-color-input"
-                oninput="setColor(this)"
-                >Test User (test@t.com)
-        </label>
-        <ul class="message-container"></ul>
-            <form class="send-container">
-                <input type="text" class="message-input-field" placeholder="Type your message here...">
-                <input type="file" class="image-input" accept="image/*" style="display: none;">
-                <button type="submit" class="send-button">Send</button>
-            </form>
+            <ul id="navList" class="chat-list">
+            <li class="chat-item active" data-kind="home">
+                <div class="title">
+                <span>Home</span>
+                <span class="badge"><span class="badge-dot"></span>—</span>
+                </div>
+                <div class="preview">Back to the home screen</div>
+            </li>
+            </ul>
+
+            <div>
+            <h2>Active chats</h2>
+            <ul id="activeList" class="chat-list"></ul>
+            </div>
+
+            <div>
+            <h2>Archived chats</h2>
+            <ul id="archivedList" class="chat-list"></ul>
+            </div>
+
+            <div class="small">
+            Tip: open <a href="/chat" target="_blank" rel="noreferrer">/chat</a>
+            in another tab to simulate a user.
+            </div>
+        </aside>
+
+        <!-- Main Chat Pane -->
+        <div class="chat-container">
+                <label class="chat-list-item" for="base-color-input">
+                    <input
+                    type="color"
+                    id = "base-color-input"
+                    oninput="setColor(this)"
+                    >Test User (test@t.com)
+            </label>
+            <ul class="message-container"></ul>
+                <form class="send-container">
+                    <input type="text" class="message-input-field" placeholder="Type your message here...">
+                    <input type="file" class="image-input" accept="image/*" style="display: none;">
+                    <button type="submit" class="send-button">Send</button>
+                </form>
+        </div>
     </div>
     <script src="http://localhost:3000/socket.io/socket.io.js"></script>
     <script src="sockets.js"></script>
