@@ -5,8 +5,8 @@
   --border: rgba(255, 255, 255, 0.08);
   --text: rgba(255, 255, 255, 0.92);
   --muted: rgba(255, 255, 255, 0.62);
-  --accent: #4f46e5;
-  --accent2: #22c55e;
+  --brand-accent: #4f46e5;
+  --brand-accent2: #22c55e;
 }
 
 * {
@@ -121,7 +121,7 @@ a {
 }
 
 .badge-dot.online {
-  background: var(--accent2);
+  background: var(--brand-accent2);
 }
 
 .chat-item .preview {
@@ -179,7 +179,7 @@ a {
   padding: 10px 14px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: var(--accent);
+  background: var(--brand-accent);
   color: var(--text);
   cursor: pointer;
 }
