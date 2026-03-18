@@ -1,0 +1,210 @@
+:root{
+    --base-color: #993e3e;
+    --brand-color: oklch(
+    from var(--base-color)
+    calc(l + 0.18)
+    clamp(0.05, calc(c * 2), 0.25)
+    h
+);
+
+    /* surfaces */
+    --surface-color: oklch(from var(--base-color) calc(l + 0.03) c h);
+
+    --surface-1: oklch(from var(--base-color) calc(l + 0.03) c h);
+    --surface-2: oklch(from var(--base-color) calc(l + 0.06) c h);
+    --surface-3: oklch(from var(--base-color) calc(l + 0.10) c h);
+
+    /* borders */
+    --border-color: oklch(from var(--base-color) calc(l + 0.15) calc(c * 0.5) h);
+
+    /* brand */
+    --brand-color: oklch(from var(--base-color) calc(l + 0.18) calc(c * 1.8) h);
+
+    /* hover */
+    --hover-color: oklch(from currentColor calc(l + 0.08) c h);
+
+    /* text */
+    --text-color: white;
+    --secondary-text-color: oklch(from var(--text-color) l c h / 0.6 );
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    background: var(--base-color);
+    color: var(--text-color);
+    display: grid;
+    grid-template-columns: 35% 1fr;
+}
+
+
+
+/* ---------- Main Chat Pane --------------- */
+.chat-container{
+    height: 100vh;
+    background: var(--surface-1);
+    position: relative;
+}
+
+/* Where inbound and outbound messages are displayed */
+.message-container{
+    background-color: var(--surface-color);
+    height: 100%;
+    display: flex;
+    flex-direction: column; /* Stack messages vertically */
+    overflow-y: auto;
+    padding: 10px;
+    gap: 10px; /* optional spacing between messages */
+}
+
+/* The container for the message input and send button */
+.send-container{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: var(--base-color);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    justify-content: space-between;
+}
+
+/* The form where messages are sent */
+.message-input-field::placeholder{
+    color: var(--secondary-text-color);
+
+
+}
+
+.message-input-field{
+    flex:1;
+    padding:10px 14px;
+    border:none;
+    font-size:15px;
+    outline:none;
+    background: var(--surface-3);
+    color: var(--secondary-text-color);
+}
+
+.message-input-field, .send-button {
+    height: 35px;
+}
+
+/* send button & animations */
+.send-button{
+    padding:10px 16px;
+    border:none;
+    border-radius:0px 8px 8px 0px;
+    background:var(--brand-color);
+    color: var(--secondary-text-color);
+    cursor:pointer;
+    transition:0.2s;
+}
+
+/* Drag highlight */
+.dragging{
+    background:var(--surface-color);
+
+}
+
+
+
+
+/* Message bubbles */
+.message{
+    color:white;
+    background-color: var(--brand-color);
+    max-width:45%;
+    padding:10px 14px;
+    border-radius:12px;
+    font-size:15px;
+    word-wrap:break-word;
+}
+.message-time{
+    font-size: 12px;
+    color: var(--secondary-text-color);
+    padding-right: 10px;
+}
+
+/* agent messages (your messages) */
+.agent{
+    background:var(--brand-color);
+    color:white;
+    align-self:flex-end;
+}
+/* Images inside messages */
+.message img{
+    max-width:250px;
+    border-radius:10px;
+    margin-top:5px;
+}
+/* File containers */
+.file{
+    max-width:65%;
+    padding:10px 14px;
+    border-radius:12px;
+    font-size:15px;
+    word-wrap:break-word;
+    background:#3f4147;
+    color:white;
+    align-self:flex-start;
+}
+/* Files from you */
+.self{
+    background:var(--surface-color);
+    align-self:flex-end;
+}
+
+
+/* Left Sidebar Chat List */
+label[for="base-color-input"] {
+    background: var(--surface-color);
+    padding: 7.em 1em;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+#base-color-input {
+    width: 2em;
+    height: 2em;
+    background: none;
+    border: none;
+
+}
+
+.chat-list{
+    height: 100vh;
+    background-color: var(--base-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-list-item{
+    background-color: var(--base-color);
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-align: center;
+}
+
+.send-container button:hover,
+.chat-list-item:hover {
+    background: oklch(
+        from var(--brand-color) /* or var(--base-color) depending on element */
+        clamp(0.05, calc(l + var(--surface-direction) * 0.08), 0.95)
+        c
+        h
+    );
+}

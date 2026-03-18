@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Info</title>
+</head>
+<body>
+    <form id="customer-details">
+        <label for="customerName">Username:</label>
+        <input type="text" id="customerName" name="customerName" required>
+        <label for="customerEmail">Email:</label>
+        <input type="email" id="customerEmail" name="customerEmail" required>
+        <button type="submit">Start Chat</button>
+    </form>
+    <script>
+        const form = document.getElementById('customer-details');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent default navigation
+
+            const name = document.getElementById('customerName').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+
+            if (!name || !email) {
+                alert("Please enter both name and email");
+                return;
+            }
+
+            // Save in sessionStorage
+            sessionStorage.setItem("customerName", name);
+            sessionStorage.setItem("customerEmail", email);
+
+            // Redirect to chat page
+            window.location.href = "chat.html";
+        });
+    </script>
+</body>
+</html>

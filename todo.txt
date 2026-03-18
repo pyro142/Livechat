@@ -1,0 +1,14 @@
+TODO - Increased error handling
+prevent any customer from sending an agent message by typing in the console and emitting an agent-message event with their socket ID as the room. We should check that the sender is actually an agent and is in a room before allowing them to send messages.
+prevent any customer emitting to other customers by checking that the sender is an agent before allowing them to emit messages to a room. We should also check that the room they are trying to send to is actually a valid customer socket ID.
+mkae sure all DOM stuff isnt XSS vulnerable
+rate limiting
+field validation
+max connections to prevent memory flodo
+review cors before deploy
+max character length
+sockets will move to wss when deploy
+
+of course improved design
+admin/agent authetnication + logs for auths and which agent sent the message
+
