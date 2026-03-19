@@ -1,6 +1,6 @@
 const socket = io('http://localhost:3000')
 const connStatus = document.getElementById('connStatus');
-const chatListElement = document.querySelector(".chat-list")
+const chatListElement = document.getElementById('activeList'); // match the HTML ID
 const messageInput = document.querySelector('.message-input-field')
 const messageForm = document.querySelector('.send-container')
 const messageContainer = document.querySelector('.message-container')
@@ -18,10 +18,13 @@ try {
 socket.on("chat-list", (chatList) => {
     console.log("Received chat list:", chatList);
     chatListElement.innerHTML = "" //Clear the list before appending new items
+
     chatList.forEach(chat => {
         //Populate the sidebar
-        createChatItem(chat)
-
+        const container = createChatItem(chat)
+        console.log("Making chat item")
+        console.log(chat)
+        chatListElement.appendChild(container);
 
         //Handle click on chat list item
         container.addEventListener("click", () => {
@@ -147,9 +150,9 @@ function createChatItem(chat) {
 
     //poulated & style the elements
     container.className = 'chat-item';
-    container.dataset.chatId = chat.id;
+    container.dataset.chatId = chat.socketId;
     titleRow.className = 'title';
-    name.textContent = chat.title;
+    name.textContent = `${chat.customerName} ${chat.email}`;
     badge.className = 'badge'; //online status badge
     dot.className = 'badge-dot' + (chat.activeUserConnected && !chat.archived ? ' online' : '');
     badgeLabel.textContent = chat.archived ? 'archived' : (chat.activeUserConnected ? 'online' : 'idle');
