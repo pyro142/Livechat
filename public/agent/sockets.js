@@ -1,5 +1,5 @@
 const socket = io('http://localhost:3000')
-
+const connStatus = document.getElementById('connStatus');
 const chatListElement = document.querySelector(".chat-list")
 const messageInput = document.querySelector('.message-input-field')
 const messageForm = document.querySelector('.send-container')
@@ -20,13 +20,11 @@ socket.on("chat-list", (chatList) => {
     chatListElement.innerHTML = "" //Clear the list before appending new items
     chatList.forEach(chat => {
         //Populate the sidebar
-        const listItem = document.createElement("li");
-        listItem.classList.add("chat-list-item");
-        listItem.textContent = `${chat.customerName} (${chat.email})`;
-        chatListElement.appendChild(listItem);
+        createChatItem(chat)
+
 
         //Handle click on chat list item
-        listItem.addEventListener("click", () => {
+        container.addEventListener("click", () => {
             //For now just log the socket ID, later we will use this to join a private room for the chat
             console.log(`Clicked on chat with socket ID: ${chat.socketId}`);
             switchChats(chat.socketId);
@@ -131,4 +129,39 @@ function appendMessage(message, type = "agent") {
     messageContainer.scrollTop = messageContainer.scrollHeight;
 
     console.log("Appended user message:", text, time);
+}
+
+function setConnectionStatus(text) {
+  connStatus.textContent = text;
+}
+
+function createChatItem(chat) {
+    //make a single li with sub elements to contain the info we want to idsplay
+    const container = document.createElement('li');
+    const titleRow = document.createElement('div');
+    const name = document.createElement('span');
+    const badge = document.createElement('span');
+    const dot = document.createElement('span');
+    const badgeLabel = document.createElement('span');
+    const preview = document.createElement('div');
+
+    //poulated & style the elements
+    container.className = 'chat-item';
+    container.dataset.chatId = chat.id;
+    titleRow.className = 'title';
+    name.textContent = chat.title;
+    badge.className = 'badge'; //online status badge
+    dot.className = 'badge-dot' + (chat.activeUserConnected && !chat.archived ? ' online' : '');
+    badgeLabel.textContent = chat.archived ? 'archived' : (chat.activeUserConnected ? 'online' : 'idle');
+    badge.appendChild(dot);
+    badge.appendChild(badgeLabel);
+    titleRow.appendChild(name);
+    titleRow.appendChild(badge);
+    preview.className = 'preview';
+    preview.textContent = chat.lastMessagePreview || (chat.archived ? 'No messages' : 'New chat');
+    container.appendChild(titleRow);
+    container.appendChild(preview);
+    container.addEventListener('click', () => selectChat(chat.id));
+
+    return container;
 }

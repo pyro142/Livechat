@@ -73,6 +73,15 @@ a {
 }
 
 /* Chat list */
+
+.home-card {
+  max-width: 720px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(17, 27, 46, 0.55);
+}
+
 .chat-list {
   list-style: none;
   margin: 0;
@@ -157,14 +166,14 @@ a {
 
 .send-container {
   display: flex;
-  gap: 10px;
+  gap: 0px;
   padding: 10px 0;
 }
 
 .message-input-field {
   flex: 1;
   padding: 10px;
-  border-radius: 12px;
+  border-radius: 12px 0px 0px 12px ;
   border: 1px solid var(--border);
   background: rgba(0, 0, 0, 0.25);
   color: var(--text);
@@ -177,7 +186,7 @@ a {
 
 .send-button {
   padding: 10px 14px;
-  border-radius: 12px;
+  border-radius: 0px 12px 12px 0px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: var(--brand-accent);
   color: var(--text);
@@ -218,3 +227,4 @@ a {
     width: 100%;
   }
 }
+

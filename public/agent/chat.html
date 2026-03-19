@@ -42,15 +42,15 @@
             </div>
         </aside>
 
-        <!-- Main Chat Pane -->
+        <!-- Home / Dash. Becomes Main Chat Pane on chat selection -->
         <div class="chat-container">
-                <label class="chat-list-item" for="base-color-input">
-                    <input
-                    type="color"
-                    id = "base-color-input"
-                    oninput="setColor(this)"
-                    >Test User (test@t.com)
-            </label>
+            <div id="homeCard" class="home-card">
+            <h1 style="margin-top: 0">Welcome</h1>
+            <p class="small" style="line-height: 1.5">
+              The sidebar shows active and archived chats. Click one to view message
+              history and respond.
+            </p>
+          </div>
             <ul class="message-container"></ul>
                 <form class="send-container">
                     <input type="text" class="message-input-field" placeholder="Type your message here...">
