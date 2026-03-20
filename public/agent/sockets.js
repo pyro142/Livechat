@@ -164,7 +164,7 @@ function createChatItem(chat) {
     preview.textContent = chat.lastMessagePreview || (chat.archived ? 'No messages' : 'New chat');
     container.appendChild(titleRow);
     container.appendChild(preview);
-    container.addEventListener('click', () => switchChats(chat.id));
+    container.addEventListener('click', () => switchChats(chat.socketId));
 
     return container;
 }
