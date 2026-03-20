@@ -193,6 +193,26 @@ a {
   cursor: pointer;
 }
 
+/* Actual chat messages */
+.message {
+  max-width: 35%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+
+.message .agent /* from me */{ 
+  align-self: flex-end;
+  background: var(--brand-accent);
+}
+
+.message .customer /* from them */{ 
+  color: var(--muted)
+}
+
+
 /* Small text */
 .small {
   font-size: 12px;

@@ -4,6 +4,7 @@ const chatListElement = document.getElementById('activeList'); // match the HTML
 const messageInput = document.querySelector('.message-input-field')
 const messageForm = document.querySelector('.send-container')
 const messageContainer = document.querySelector('.message-container')
+const homeCard = document.getElementById('homeCard')
 
 
 //say hi to server
@@ -13,6 +14,11 @@ try {
 } catch (err) {
     console.error("Error sending emit:", err);
 }
+
+//Update UI Depending on connection
+socket.on('connect', () => setConnectionStatus('Connected'));
+socket.on('disconnect', () => setConnectionStatus('Disconnected'));
+
 
 //get the chat list
 socket.on("chat-list", (chatList) => {
@@ -25,13 +31,6 @@ socket.on("chat-list", (chatList) => {
         console.log("Making chat item")
         console.log(chat)
         chatListElement.appendChild(container);
-
-        //Handle click on chat list item
-        container.addEventListener("click", () => {
-            //For now just log the socket ID, later we will use this to join a private room for the chat
-            console.log(`Clicked on chat with socket ID: ${chat.socketId}`);
-            switchChats(chat.socketId);
-        });
     });
 });
 
@@ -82,8 +81,9 @@ function switchChats(customerSocketId) {
     messageContainer.innerHTML = "";
     socket.emit("join-chat", { customerSocketId });
     console.log(`${socket.id} emitted join-chat for socket ID: ${customerSocketId}`);
-    
+    homeCard.style.display ='none'
 }
+
 //retrieve chat hiistroy
 socket.on("chat-history", (history) => {
     console.log("Received chat history:", history);
@@ -164,7 +164,7 @@ function createChatItem(chat) {
     preview.textContent = chat.lastMessagePreview || (chat.archived ? 'No messages' : 'New chat');
     container.appendChild(titleRow);
     container.appendChild(preview);
-    container.addEventListener('click', () => selectChat(chat.id));
+    container.addEventListener('click', () => switchChats(chat.id));
 
     return container;
 }

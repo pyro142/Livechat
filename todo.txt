@@ -15,3 +15,6 @@ admin/agent authetnication + logs for auths and which agent sent the message
 confirm https compat
 use of namespaces for segrgation in socket io for admin (multiplexing) 
 sessions wioth express? https://socket.io/how-to/use-with-express-session connection state recovery and / or session ID or cookie           
+Turn sidebar into hamburger on mobile screen szies
+
+When chat is selected, we shouldnt pull the entire chat history from the server if teh chat has already been selected.
