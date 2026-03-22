@@ -82,6 +82,7 @@ function switchChats(customerSocketId) {
     socket.emit("join-chat", { customerSocketId });
     console.log(`${socket.id} emitted join-chat for socket ID: ${customerSocketId}`);
     homeCard.style.display ='none'
+    messageForm.stlye.display = ''
 }
 
 //retrieve chat hiistroy
