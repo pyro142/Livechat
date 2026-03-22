@@ -1,9 +1,10 @@
 const socket = io('http://localhost:3000')
-
-const chatListElement = document.querySelector(".chat-list")
+const connStatus = document.getElementById('connStatus');
+const chatListElement = document.getElementById('activeList'); // match the HTML ID
 const messageInput = document.querySelector('.message-input-field')
 const messageForm = document.querySelector('.send-container')
 const messageContainer = document.querySelector('.message-container')
+const homeCard = document.getElementById('homeCard')
 
 
 //say hi to server
@@ -14,23 +15,22 @@ try {
     console.error("Error sending emit:", err);
 }
 
+//Update UI Depending on connection
+socket.on('connect', () => setConnectionStatus('Connected'));
+socket.on('disconnect', () => setConnectionStatus('Disconnected'));
+
+
 //get the chat list
 socket.on("chat-list", (chatList) => {
     console.log("Received chat list:", chatList);
     chatListElement.innerHTML = "" //Clear the list before appending new items
+
     chatList.forEach(chat => {
         //Populate the sidebar
-        const listItem = document.createElement("li");
-        listItem.classList.add("chat-list-item");
-        listItem.textContent = `${chat.customerName} (${chat.email})`;
-        chatListElement.appendChild(listItem);
-
-        //Handle click on chat list item
-        listItem.addEventListener("click", () => {
-            //For now just log the socket ID, later we will use this to join a private room for the chat
-            console.log(`Clicked on chat with socket ID: ${chat.socketId}`);
-            switchChats(chat.socketId);
-        });
+        const container = createChatItem(chat)
+        console.log("Making chat item")
+        console.log(chat)
+        chatListElement.appendChild(container);
     });
 });
 
@@ -81,8 +81,10 @@ function switchChats(customerSocketId) {
     messageContainer.innerHTML = "";
     socket.emit("join-chat", { customerSocketId });
     console.log(`${socket.id} emitted join-chat for socket ID: ${customerSocketId}`);
-    
+    homeCard.style.display ='none'
+    messageForm.stlye.display = ''
 }
+
 //retrieve chat hiistroy
 socket.on("chat-history", (history) => {
     console.log("Received chat history:", history);
@@ -131,4 +133,39 @@ function appendMessage(message, type = "agent") {
     messageContainer.scrollTop = messageContainer.scrollHeight;
 
     console.log("Appended user message:", text, time);
+}
+
+function setConnectionStatus(text) {
+  connStatus.textContent = text;
+}
+
+function createChatItem(chat) {
+    //make a single li with sub elements to contain the info we want to idsplay
+    const container = document.createElement('li');
+    const titleRow = document.createElement('div');
+    const name = document.createElement('span');
+    const badge = document.createElement('span');
+    const dot = document.createElement('span');
+    const badgeLabel = document.createElement('span');
+    const preview = document.createElement('div');
+
+    //poulated & style the elements
+    container.className = 'chat-item';
+    container.dataset.chatId = chat.socketId;
+    titleRow.className = 'title';
+    name.textContent = `${chat.customerName} ${chat.email}`;
+    badge.className = 'badge'; //online status badge
+    dot.className = 'badge-dot' + (chat.activeUserConnected && !chat.archived ? ' online' : '');
+    badgeLabel.textContent = chat.archived ? 'archived' : (chat.activeUserConnected ? 'online' : 'idle');
+    badge.appendChild(dot);
+    badge.appendChild(badgeLabel);
+    titleRow.appendChild(name);
+    titleRow.appendChild(badge);
+    preview.className = 'preview';
+    preview.textContent = chat.lastMessagePreview || (chat.archived ? 'No messages' : 'New chat');
+    container.appendChild(titleRow);
+    container.appendChild(preview);
+    container.addEventListener('click', () => switchChats(chat.socketId));
+
+    return container;
 }
