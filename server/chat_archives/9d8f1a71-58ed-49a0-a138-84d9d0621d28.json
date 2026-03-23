@@ -1,0 +1,20 @@
+{
+  "chatId": "9d8f1a71-58ed-49a0-a138-84d9d0621d28",
+  "customerName": "Mark",
+  "email": "mark@gmail.com",
+  "socketId": "yVwV2uR12OktWW_SAAAC",
+  "startedAt": "01:14",
+  "endedAt": "2026-03-23T01:15:19.199Z",
+  "messages": [
+    {
+      "sender": "customer",
+      "text": "testng goog sir",
+      "time": "01:14"
+    },
+    {
+      "sender": "agent",
+      "text": "i saw your message",
+      "time": "01:14"
+    }
+  ]
+}

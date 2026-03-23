@@ -1,31 +1,43 @@
 //Socket handling
 module.exports = function setupSockets(io) {
 
-    const customers = {} //Object to store connected users and their socket IDs
-    const agents = {} //Object to store connected users and their socket IDs
-    const chatRooms = {} //Not used yet - Object to store active chat rooms and their participants
-    const chatHistory = {} //Object to store chat history for each customer socket ID
+    const customers = {}
+    const agents = {}
+    const chatRooms = {}
+    const chatHistory = {}
+    const fs = require("fs")
+    const path = require("path")
+    const { randomUUID } = require("crypto");
+
+
+    // Directory where chat JSON files will be saved
+    const CHAT_ARCHIVE_DIR = path.join(__dirname, "chat_archives");
+    if (!fs.existsSync(CHAT_ARCHIVE_DIR)) {
+        fs.mkdirSync(CHAT_ARCHIVE_DIR, { recursive: true });
+    }
 
     //New Socket Connection
     io.on("connection", (socket) => {
         //Agent connects
         socket.on("new-agent", ({ username }) => {
-        console.log(`Agent ${username} connected with socket ID: ${socket.id}`);
-        agents[socket.id] = {
-        username,
-        socketId: socket.id
-    };
-
+            console.log(`Agent ${username} connected with socket ID: ${socket.id}`);
+            agents[socket.id] = {
+            username,
+            socketId: socket.id
+        };
         //Send them the list of open chats (customer sockets & info)
         socket.emit("chat-list", Object.values(customers));
         });
 
         //Customer Connects
         socket.on("new-customer", ({ email, customerName }) => {
+            const chatId = randomUUID(); //since socketID isnt guarenteed to be unique lets use this since its a little better
+
             customers[socket.id] = {
                 email,
                 customerName,
-                socketId: socket.id
+                socketId: socket.id,
+                chatId
             };
             console.log(`Customer ${customerName} connected with socket ID: ${socket.id}`);
             //Notify all agents of the new chat
@@ -97,6 +109,16 @@ module.exports = function setupSockets(io) {
         socket.on("disconnect", () => {
             if (customers[socket.id]) {
                 console.log(`Customer ${customers[socket.id].customerName} disconnected`);
+
+                // Store the chat to disk before clearing from memory
+                const customer = customers[socket.id];
+                const history = chatHistory[socket.id];
+                if (history && history.length > 0) {
+                    storeMessages(customer, history);
+                }
+
+
+                delete chatHistory[socket.id]; // Clear from memory
                 delete customers[socket.id];
                 io.emit("chat-list", Object.values(customers));
             } else if (agents[socket.id]) {
@@ -105,5 +127,33 @@ module.exports = function setupSockets(io) {
             }
         });
     })
+
+    //Store the chats as JSON
+    //uses chatID since socketID is gone once connection closes
+    function storeMessages(customer, history){
+        const { chatId, customerName, email, socketId } = customer;
+
+        const chatRecord = {
+            chatId,
+            customerName,
+            email,
+            socketId,           // Stored for debug , not used for lookup
+            startedAt: history[0]?.time || new Date().toISOString(),
+            endedAt: new Date().toISOString(),
+            messages: history   // Array of { sender, text, time }
+        };
+
+        const filePath = path.join(CHAT_ARCHIVE_DIR, `${chatId}.json`);
+        //build the json and write it
+            fs.writeFile(filePath, JSON.stringify(chatRecord, null, 2), (err) => { //async file write
+            if (err) {
+                console.error(`Failed to archive chat ${chatId} for ${customerName}:`, err);
+            } else {
+                console.log(`Chat archived: ${filePath}`);
+            }
+        });
+
+
+    }
 }
 

@@ -203,13 +203,20 @@ a {
 }
 
 
-.message .agent /* from me */{ 
-  align-self: flex-end;
+.message.agent /* from me */{ 
+  margin-left: auto;
   background: var(--brand-accent);
 }
 
-.message .customer /* from them */{ 
+.message.customer /* from them */{ 
   color: var(--muted)
+}
+
+.message-time {
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 0px 10px 0px 0px;
 }
 
 

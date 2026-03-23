@@ -13,7 +13,7 @@ const { instrument } = require("@socket.io/admin-ui");
 //Server setup
 const io = new Server(server, {
   cors: {
-    origin: ["http://127.0.0.1:5501", "http://10.144.15.17:5500", "https://admin.socket.io, http://127.0.0.1:5501"],
+    origin: ["http://127.0.0.1:5501", "http://10.144.15.17:5500", "https://admin.socket.io", "http://127.0.0.1:3000", "http://127.0.0.1:5500"],
   }
 });
 
