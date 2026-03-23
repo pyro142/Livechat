@@ -82,7 +82,7 @@ function switchChats(customerSocketId) {
     socket.emit("join-chat", { customerSocketId });
     console.log(`${socket.id} emitted join-chat for socket ID: ${customerSocketId}`);
     homeCard.style.display ='none'
-    messageForm.stlye.display = ''
+    messageForm.style.display = ''
 }
 
 //retrieve chat hiistroy
@@ -106,9 +106,10 @@ socket.on("chat-history", (history) => {
 
 
 // Update chat with new message (user messages)
-function appendMessage(message, type = "agent") {
+function appendMessage(message, type) {
     const messageElement = document.createElement("li");
     messageElement.classList.add("message", type);
+    console.log(messageElement.className);
 
     // Determine text and time
     const text = typeof message === 'object' && message.text ? message.text : message;
